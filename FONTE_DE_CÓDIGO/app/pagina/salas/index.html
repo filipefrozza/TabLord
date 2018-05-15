@@ -1,0 +1,45 @@
+<div class="container">
+	<div class="row" ng-if="!selSala">
+		<div class="col-md-12">
+			<h2>Salas <button class="btn btn-primary" ng-click="$parent.$parent.sala = {}" ng-if="!$parent.sala">Criar</button></h2>
+			<form ng-submit="criarSala(you, sala);" ng-if="$parent.sala">
+				<input type="text" name="nome" ng-model="$parent.$parent.sala.nome">
+				<button class="btn btn-primary" type="submit">Criar</button>
+			</form>
+		</div>
+		<div class="col-md-4 p-1" ng-repeat="s in salas">
+			<div class="card">
+				<!-- <div class="col-md-6">
+					<img src="assets/image/chat.png">
+				</div> -->
+				<div class="col-md-6 p-3">
+					<h3>{{s.nome}}</h3>
+					<p>{{s.quantidade}}/4</p>
+					<button ng-click="selecionarSala(s, you);" class="btn btn-primary">Entrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-if="selSala">
+		<div class="col-md-12">
+			<h2>{{selSala.nome}} <button class="btn btn-danger" ng-click="sairSala(selSala, you);">Sair</button></h2>
+			<p ng-repeat="i in selSala.integrantes">{{i.player}}</p>
+		</div>
+		<div class="col-md-4 p-1">
+			<div class="card">
+				<div class="col-md-12 p-3">
+					<h3>Bate Papo</h3>
+					<p ng-repeat="m in selSala.mensagens">{{m.player}}: {{m.mensagem}}</p>
+					<form class="form-inline">
+						<div class="form-group">
+							<input class="form-control" type="text" ng-model="$parent.mensagem">
+						</div>
+						<div class="form-group">
+							<button class="btn btn-primary" ng-click="enviarMensagem(mensagem, you, selSala);">Enviar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
