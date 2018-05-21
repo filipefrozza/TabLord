@@ -1,14 +1,64 @@
-<section class="container mt-3" style="border: 1px solid black;">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="col-md-6">
-				<button class="btn btn-primary">Criar Sala</button>
+<section class="container mt-3">
+	<div class="row" style="border: 1px solid black;">
+		<div class="col-md-2 p-3">
+			<button class="btn btn-primary">Criar Sala</button>
+		</div>
+		<div class="col-md-4 p-3">
+			<form class="form-inline my-2 my-lg-0">
+		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="p-1 fa fa-search"></i></button>
+		    </form>
+		</div>
+	</div>
+	<div class="row" style="border: 1px solid black;">
+		<div class="col-md-2 p-2">
+			<div class="p-3" style="border: 1px solid black;">
+				
 			</div>
-			<div class="col-md-6">
-				<form class="form-inline my-2 my-lg-0">
-			      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-			      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="p-1 fa fa-search"></i></button>
-			    </form>
+		</div>
+		<div class="col-md-2 p-2">
+			<input class="form-control" type="text" name="nome" placeholder="Nome da Sala">
+		</div>
+		<div class="col-md-1 p-2">
+			<label>
+				<p>Máx. Part.</p>
+				<select class="form-control">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+			</label>
+		</div>
+		<div class="col-md-2 p-2">
+			<p><input class="form-control" type="checkbox" name="teste">Regra 1</p>
+		</div>
+		<div class="col-md-2 p-2">
+			<p><input class="form-control" type="checkbox" name="teste2">Regra 2</p>
+		</div>
+	</div>
+	<div class="row" style="border: 1px solid black;">
+		<div class="container">
+			<div class="row col-md-12">
+				<div class="col-md-2" style="background-color: gray;"></div>
+				<div class="col-md-3">
+					<p>Nome da Sala</p>
+				</div>
+				<div class="col-md-1">
+					<p>Líder</p>
+				</div>
+				<div class="col-md-1">
+					<p>1/4</p>
+				</div>
+				<div class="col-md-2">
+					<p>Regras 1</p>
+				</div>
+				<div class="col-md-2">
+					<p>Regras 2</p>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-primary">Entrar</button>
+				</div>
 			</div>
 		</div>
 	</div>
