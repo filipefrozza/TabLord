@@ -37,21 +37,21 @@
 			<p><input class="form-control" type="checkbox" name="teste2">Regra 2</p>
 		</div>
 	</div>
-	<div class="row" style="border: 1px solid black;">
+	<div class="row" style="border: 1px solid black;" ng-repeat="sala in salas">
 		<div class="container">
 			<div class="row col-md-12">
 				<div class="col-md-2" style="background-color: gray;"></div>
 				<div class="col-md-3">
-					<p>Nome da Sala</p>
+					<p>{{sala.nome}}</p>
 				</div>
 				<div class="col-md-1">
-					<p>Líder</p>
+					<p>{{sala.lider}}</p>
 				</div>
 				<div class="col-md-1">
-					<p>1/4</p>
+					<p>{{sala.quantidade}}/4</p>
 				</div>
 				<div class="col-md-2">
-					<p>Regras 1</p>
+					<p ng-repeat="regra in sala.regras">{{regra}}</p>
 				</div>
 				<div class="col-md-2">
 					<p>Regras 2</p>

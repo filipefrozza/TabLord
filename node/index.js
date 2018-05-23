@@ -23,3 +23,11 @@ app.get('/', function(req, res){
 http.listen(666, function(){
 	console.log('lerigou');
 });
+
+salas = require('./node/modulos/salas/');
+players = [];
+
+io.on('connection', function(socket){
+	salas.iniciar(socket);
+	contas.iniciar(socket);
+});
