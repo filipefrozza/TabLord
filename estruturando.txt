@@ -1,0 +1,8 @@
+-jogador-
+id
+nick
+login
+senha
+nivel
+experiencia
+status
