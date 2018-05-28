@@ -1,0 +1,71 @@
+<section class="container mt-3">
+	<div class="row" style="border: 1px solid black;">
+		<div class="col-md-2 p-3">
+			<button class="btn btn-primary" ng-if="!cadSala" ng-click="$parent.cadSala = {};">Criar Sala</button>
+			<button class="btn btn-danger" ng-if="cadSala" ng-click="$parent.cadSala = false">Cancelar Criação</button>
+		</div>
+		<div class="col-md-4 p-3">
+			<form class="form-inline my-2 my-lg-0">
+		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="p-1 fa fa-search"></i></button>
+		    </form>
+		</div>
+	</div>
+	<div class="row" style="border: 1px solid black;" ng-if="cadSala">
+		<div class="col-md-2 p-2">
+			<div class="py-5" style="border: 1px solid black;">
+				Clique pra selecionar o mapa
+				<input type="hidden" ng-model="cadSala.mapa">
+			</div>
+		</div>
+		<div class="col-md-2 px-2 py-5 form-group">
+			<input class="form-control form-control-lg" type="text" name="nome" placeholder="Nome da Sala" ng-model="cadSala.nome">
+		</div>
+		<div class="col-md-2 p-2 form-group">
+			<label>
+				<p>Participantes</p>
+				<select class="form-control form-control-lg" ng-model="cadSala.mapa" ng-model="cadSala.limite">
+					<option value="" disabled="" hidden="">Sel.</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+				</select>
+			</label>
+		</div>
+		<div class="col-md-2 p-2 py-5 form-group">
+			<p><input class="form-control form-control-lg" type="checkbox" name="teste" ng-model="cadSala.regra.r1">Regra 1</p>
+		</div>
+		<div class="col-md-2 p-2 py-5 form-group">
+			<p><input class="form-control form-control-lg" type="checkbox" name="teste2" ng-model="cadSala.regra.r2">Regra 2</p>
+		</div>
+		<div class="col-md-2 px-2 py-5 form-group">
+			<button class="btn btn-primary" ng-click="criarSala(cadSala);">Criar</button>
+		</div>
+	</div>
+	<div class="row" style="border: 1px solid black;" ng-repeat="sala in salas" ng-if="!cadSala">
+		<div class="container">
+			<div class="row col-md-12">
+				<div class="col-md-2" style="background-color: gray;"></div>
+				<div class="col-md-3">
+					<p>{{sala.nome}}</p>
+				</div>
+				<div class="col-md-1">
+					<p>{{sala.lider}}</p>
+				</div>
+				<div class="col-md-1">
+					<p>{{sala.quantidade}}/4</p>
+				</div>
+				<div class="col-md-2">
+					<p ng-repeat="regra in sala.regras">{{regra}}</p>
+				</div>
+				<div class="col-md-2">
+					<p>Regras 2</p>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-primary">Entrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

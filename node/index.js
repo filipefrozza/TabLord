@@ -24,10 +24,12 @@ http.listen(666, function(){
 	console.log('lerigou');
 });
 
-salas = require('./node/modulos/salas/');
+salas = require('./modulos/salas/');
+contas = require('./modulos/contas/');
 players = [];
 
 io.on('connection', function(socket){
+	player = {};
 	salas.iniciar(socket);
 	contas.iniciar(socket);
 });

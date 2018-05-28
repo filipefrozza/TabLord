@@ -16,6 +16,7 @@ exports.criarSala = function(nome){
 		nome: nome,
 		integrantes: {},
 		index: index,
+		lider: {},
 		quantidade: 0
 	};
 	return true;
