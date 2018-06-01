@@ -48,4 +48,5 @@ if(!window.location.hash.match(/\#\/erro.+/gi)){
 
 socket.on('reconnect', (attemptNumber) => {
   console.log("conseguiu reconectar na tentativa "+attemptNumber);
+  window.location.href = "#/";
 });

@@ -8,32 +8,44 @@ exports.data = {
   // }
 };
 
-exports.criarSala = function(nome){
+exports.criarSala = function(nome, player){
 	var index = nome.toLowerCase().replace(' ','-');
 	if(this.data[index])
 		return false;
 	this.data[index] = {
 		nome: nome,
-		integrantes: {},
+		integrantes: {player.index: player},
 		index: index,
-		lider: {},
-		quantidade: 0
+		lider: player,
+		quantidade: 1
 	};
 	return true;
 };
 
-exports.iniciar = function(socket){
+exports.iniciar = function(socket, player){
+	socket.on('conectar',function(m){
+	    if(!players[m]){
+			players[m] = {nome: m, sala: null};
+	    	socket.emit('conectado','true');
+	    	// io.emit('conectado',m);
+	    	console.log(m, " se conectou");
+	    }else{
+	    	io.emit('conectado_'+m,'false');
+	    	console.log(m, " conexao duplicada");
+	    }
+	});
+
 	socket.on('sala_conectar',function(m){
 		m = JSON.parse(m);
-	    console.log(m.player, "tentando se conectar a sala "+m.sala);
+	    console.log(m.index, "tentando se conectar a sala "+m.sala);
 	    if(salas.data[m.sala].quantidade >= 4){
 	    	socket.emit('sala_conectado', JSON.stringify({erro: "Sala lotada"}));
-	    	console.log(m.player, ", a sala estava lotada");
-	    }else if(salas.data[m.sala].integrantes[m.player]){
+	    	console.log(m.index, ", a sala estava lotada");
+	    }else if(salas.data[m.sala].integrantes[m.index]){
 	    	socket.emit('sala_conectado', JSON.stringify({erro: "Já está nessa sala"}));
-	    	console.log(m.player, "já estava conectado a sala");
+	    	console.log(m.index, "já estava conectado a sala");
 	    }else{
-	      	salas.data[m.sala].integrantes[m.player] = m;
+	      	salas.data[m.sala].integrantes[m.index] = m;
 	      	salas.data[m.sala].quantidade++;
 	      	// salas['iniciantes'].mensagens.push();
 	      	socket.join(m.sala);
@@ -42,7 +54,7 @@ exports.iniciar = function(socket){
 	      	// rsala = Object.assign({}, salas.data[m.sala]);
 	      	// delete rsala.mensagens;
 	      	socket.emit('sala_conectado', JSON.stringify(salas.data[m.sala]));
-	      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({player: 'Sistema', mensagem: m.player+" entrou na sala"}));
+	      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({index: 'Sistema', mensagem: m.index+" entrou na sala"}));
 	    }
 	});
 
@@ -88,7 +100,7 @@ exports.iniciar = function(socket){
 	socket.on('criar_sala', function(m){
 		m = JSON.parse(m);
 		var index = m.sala.toLowerCase().replace(' ','-');
-		if(salas.criarSala(m.sala)){
+		if(salas.criarSala(m.sala, player)){
 			io.emit('sala_criada', JSON.stringify(salas.data));
 			socket.emit('forcar_entrada', JSON.stringify(salas.data[index]));
 		}else{
