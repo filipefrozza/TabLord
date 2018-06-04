@@ -8,30 +8,34 @@ exports.data = {
   // }
 };
 
-exports.criarSala = function(nome, player){
+exports.criarSala = function(sala, player){
 	var index = nome.toLowerCase().replace(' ','-');
 	if(this.data[index])
 		return false;
 	this.data[index] = {
-		nome: nome,
-		integrantes: {player.index: player},
+		nome: sala.nome,
+		integrantes: {},
 		index: index,
-		lider: player,
-		quantidade: 1
+		lider: player.nome,
+		quantidade: 1,
+		regras: sala.regras,
+		limite: sala.limite
 	};
+	this.data[index].integrantes[player.index] = player;
 	return true;
 };
 
 exports.iniciar = function(socket, player){
 	socket.on('conectar',function(m){
-	    if(!players[m]){
-			players[m] = {nome: m, sala: null};
+		m = JSON.parse(m);
+	    if(!players[m.index]){
+			players[m.index] = {nome: m.nome, sala: null, index: m.index};
 	    	socket.emit('conectado','true');
 	    	// io.emit('conectado',m);
-	    	console.log(m, " se conectou");
+	    	console.log(m.nome, " se conectou");
 	    }else{
-	    	io.emit('conectado_'+m,'false');
-	    	console.log(m, " conexao duplicada");
+	    	io.emit('conectado','false');
+	    	console.log(m.nome, " conexao duplicada");
 	    }
 	});
 
@@ -94,13 +98,14 @@ exports.iniciar = function(socket, player){
 	    	salas.data[m.sala].quantidade--;
 	    	if(salas.data[m.sala].quantidade==0) delete salas.data[m.sala];
 	    	io.emit('atualizar_salas', JSON.stringify(salas.data));
+	    	delete players[m.index];
 	    }
 	});
 
 	socket.on('criar_sala', function(m){
 		m = JSON.parse(m);
 		var index = m.sala.toLowerCase().replace(' ','-');
-		if(salas.criarSala(m.sala, player)){
+		if(salas.criarSala(m, player)){
 			io.emit('sala_criada', JSON.stringify(salas.data));
 			socket.emit('forcar_entrada', JSON.stringify(salas.data[index]));
 		}else{

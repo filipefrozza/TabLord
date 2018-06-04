@@ -38,10 +38,12 @@ exports.iniciar = function(socket, player){
 
   socket.on('disconnected',function(m){
     m = JSON.parse(m);
-    if(!players[m.player])
-      return false;
-    io.emit('disconnection',JSON.stringify(m));
-    delete players[m.player];
-    console.log(m.player," se desconectou");
+    if(m.index){
+      if(!players[m.index])
+        return false;
+      io.emit('disconnection',JSON.stringify(m));
+      delete players[m.player];
+      console.log(m.player," se desconectou");
+    }
   });
 };

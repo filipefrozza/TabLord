@@ -16,6 +16,15 @@ angular.module('tablord')
 					}]
 				}
 			})
+			.when('/login/', {
+				templateUrl: 'app/pagina/login/',
+				controller: 'login',
+				resolve: {
+					loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+						return $ocLazyLoad.load('app/pagina/login/controller.js');
+					}]
+				}
+			})
 			.when('/erro/:erro', {
 				templateUrl: 'app/pagina/erro/',
 				controller: 'erro',
