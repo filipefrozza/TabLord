@@ -40,8 +40,22 @@ angular.module('tablord')
 			requireBase: false
 		});
 	})
-	.controller('main', function($scope, $rootScope){
+	.controller('main', function($scope, $rootScope, $cookies){
+		if($cookies.get('AUTH')){
+			$rootScope.user = {
+				auth: $cookies.get('AUTH'),
+				login: $cookies.get('USUARIO'),
+				nome: $cookies.get('NOME')
+			};
+		}
 
+		$scope.deslogar = function(){
+			$cookies.remove('AUTH');
+			$cookies.remove('NOME');
+			$cookies.remove('USUARIO');
+			delete $rootScope.user;
+			window.location.href="#/";
+		};
 	});
 
 socket = io.connect('http://localhost:666');

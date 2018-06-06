@@ -28,8 +28,8 @@ exports.criarSala = function(sala, player){
 exports.iniciar = function(socket, player){
 	socket.on('conectar',function(m){
 		m = JSON.parse(m);
-	    if(!players[m.index]){
-			players[m.index] = {nome: m.nome, sala: null, index: m.index};
+	    if(!players[m.login]){
+			players[m.login] = {nome: m.nome, sala: null, index: m.login};
 	    	socket.emit('conectado','true');
 	    	// io.emit('conectado',m);
 	    	console.log(m.nome, " se conectou");
@@ -41,15 +41,15 @@ exports.iniciar = function(socket, player){
 
 	socket.on('sala_conectar',function(m){
 		m = JSON.parse(m);
-	    console.log(m.index, "tentando se conectar a sala "+m.sala);
+	    console.log(m.login, "tentando se conectar a sala "+m.sala);
 	    if(salas.data[m.sala].quantidade >= 4){
 	    	socket.emit('sala_conectado', JSON.stringify({erro: "Sala lotada"}));
-	    	console.log(m.index, ", a sala estava lotada");
-	    }else if(salas.data[m.sala].integrantes[m.index]){
+	    	console.log(m.login, ", a sala estava lotada");
+	    }else if(salas.data[m.sala].integrantes[m.login]){
 	    	socket.emit('sala_conectado', JSON.stringify({erro: "Já está nessa sala"}));
-	    	console.log(m.index, "já estava conectado a sala");
+	    	console.log(m.login, "já estava conectado a sala");
 	    }else{
-	      	salas.data[m.sala].integrantes[m.index] = m;
+	      	salas.data[m.sala].integrantes[m.login] = m;
 	      	salas.data[m.sala].quantidade++;
 	      	// salas['iniciantes'].mensagens.push();
 	      	socket.join(m.sala);
@@ -58,7 +58,7 @@ exports.iniciar = function(socket, player){
 	      	// rsala = Object.assign({}, salas.data[m.sala]);
 	      	// delete rsala.mensagens;
 	      	socket.emit('sala_conectado', JSON.stringify(salas.data[m.sala]));
-	      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({index: 'Sistema', mensagem: m.index+" entrou na sala"}));
+	      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({index: 'Sistema', mensagem: m.login+" entrou na sala"}));
 	    }
 	});
 
