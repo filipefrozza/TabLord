@@ -24,9 +24,8 @@
 		<div class="col-md-2 p-2 form-group">
 			<label>
 				<p>Participantes</p>
-				<select class="form-control form-control-lg" ng-model="cadSala.mapa" ng-model="cadSala.limite">
+				<select class="form-control form-control-lg" ng-model="cadSala.limite">
 					<option value="" disabled="" hidden="">Sel.</option>
-					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="4">4</option>
@@ -54,7 +53,7 @@
 					<p>{{sala.lider}}</p>
 				</div>
 				<div class="col-md-1">
-					<p>{{sala.quantidade}}/4</p>
+					<p>{{sala.quantidade}}/{{sala.limite}}</p>
 				</div>
 				<div class="col-md-2">
 					<p ng-repeat="regra in sala.regras">{{regra}}</p>

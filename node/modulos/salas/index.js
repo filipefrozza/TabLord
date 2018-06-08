@@ -40,7 +40,7 @@ exports.iniciar = function(socket, player){
 		m = JSON.parse(m);
 	    console.log(m.login, "tentando se conectar a sala "+m.sala);
 	    if(salas.data[m.sala]){
-		    if(salas.data[m.sala].quantidade >= 4){
+		    if(salas.data[m.sala].quantidade >= salas.data[m.sala].limite){
 		    	socket.emit('sala_conectado', JSON.stringify({erro: "Sala lotada"}));
 		    	console.log(m.login, ", a sala estava lotada");
 		    }else if(salas.data[m.sala].integrantes[m.login]){
@@ -106,6 +106,8 @@ exports.iniciar = function(socket, player){
 
 	socket.on('criar_sala', function(m){
 		m = JSON.parse(m);
+		if(!m.limite) m.limite = 4;
+		if(m.limite != 2 || m.limite != 3 || m.limite != 4) m.limite = 4;
 		var index = m.nome.toLowerCase().replace(' ','-');
 		if(salas.criarSala(m, player)){
 			io.emit('sala_criada', JSON.stringify(salas.data));
