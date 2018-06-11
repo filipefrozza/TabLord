@@ -74,7 +74,10 @@
 			<h2>{{selSala.nome}} <button class="btn btn-danger" ng-click="sairSala(selSala, you);">Sair</button></h2>
 			<p ng-repeat="i in selSala.integrantes">{{i.player}}</p>
 		</div>
-		<div class="col-md-4 p-1">
+		<div class="col-md-8 p-1">
+			<game-app></game-app>
+		</div>
+		<div class="col-md-4 game-chat">
 			<div class="card">
 				<div class="col-md-12 p-3">
 					<h3>Bate Papo</h3>

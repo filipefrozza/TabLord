@@ -16,3 +16,13 @@ header{
 .pointer {
 	cursor: pointer;
 }
+
+.game-chat {
+	padding: 0;
+    position: relative;
+    height: 404px;
+}
+
+canvas{
+	background-color: white;
+}
