@@ -34,6 +34,9 @@ angular.module('tablord')
 					}]
 				}
 			})
+			.when('/teste/', {
+				templateUrl: 'app/pagina/teste/'
+			})
 			.otherwise({redirectTo: '/'});
 		$locationProvider.html5Mode({
 			enabled: false,
