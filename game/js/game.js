@@ -13,7 +13,7 @@ function gameLoop() {
 		CONTEXT.clearRect(0, 0, CONTEXT.canvas.width,CONTEXT.canvas.height);
 		
 		if(!Teste.start){
-			Teste.iniciar();
+			Teste.iniciar(true);
 		}
 		Teste.desenhar();
 		// Teste.grid = [[0,1,2],[1,2,1],[0,0,1]];

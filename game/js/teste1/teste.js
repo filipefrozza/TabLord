@@ -1,10 +1,13 @@
 Teste = {
 	tela: 'pause',
 	vez: '0',
-	jogadores: [],
-	grid: [[0,0,0],[0,0,0],[0,0,0]],
-	you: '1',
+	adversario: "Teste",
+	grid: [['0','0','0'],['0','0','0'],['0','0','0']],
+	l: [],
+	c: [],
+	d: [],
 	start: false,
+	vencedor: null,
 	desenharGrade: function(){
 		CONTEXT.moveTo(300,50);
 		CONTEXT.lineTo(300,350);
@@ -41,6 +44,16 @@ Teste = {
 			CONTEXT.fillText("Sua vez",313,20);
 		}
 	},
+	desenharFinal: function(){
+		CONTEXT.font = "50px Verdana";
+		if(Teste.vencedor == '1'){
+			CONTEXT.fillText("Você Venceu!",200,200);	
+		}else if(Teste.vencedor == '2'){
+			CONTEXT.fillText("Você Perdeu!",200,200);
+		}else{
+			CONTEXT.fillText("Empatou!",200,200);
+		}
+	},
 	calcularObjeto: function(x,y){
 		var objX = ~~((x-200)/100);
 		var objY = ~~((y-50)/100);
@@ -50,6 +63,21 @@ Teste = {
 			return {x: objX, y: objY};
 		}
 	},
+	gravarJogada: function(x,y,v){
+		Teste.grid[y][x] = v;
+		Teste.l = [];
+		Teste.c = [];
+		Teste.d = [];
+		var grid = Teste.grid;
+		Teste.l.push(grid[0][0]+grid[0][1]+grid[0][2]);
+		Teste.l.push(grid[1][0]+grid[1][1]+grid[1][2]);
+		Teste.l.push(grid[2][0]+grid[2][1]+grid[2][2]);
+		Teste.c.push(grid[0][0]+grid[1][0]+grid[2][0]);
+		Teste.c.push(grid[0][1]+grid[1][1]+grid[2][1]);
+		Teste.c.push(grid[0][2]+grid[1][2]+grid[2][2]);
+		Teste.d.push(grid[0][0]+grid[1][1]+grid[2][2]);
+		Teste.d.push(grid[0][2]+grid[1][1]+grid[2][0]);
+	},
 	calcularJogada: function(x,y){
 		if(Teste.vez != '1'){
 			return false;
@@ -58,8 +86,16 @@ Teste = {
 		//nessa parte, o jogo deve mandar via socket, e receber a informação se a jogada é válida
 		if(obj){
 			if(Teste.grid[obj.y][obj.x] == '0'){
-				Teste.grid[obj.y][obj.x] = '1';
-				Teste.vez = '2';
+				Teste.gravarJogada(obj.x,obj.y,'1');
+				if(Teste.calcularVitoria()){
+					Teste.tela = 'final';
+				}else{
+					Teste.vez = '2';
+					Teste.jogadaBot();
+					if(Teste.calcularVitoria()){
+						Teste.tela = 'final';
+					}
+				}
 				return true;
 			}else{
 				return false;
@@ -67,18 +103,96 @@ Teste = {
 		}
 		return false;
 	},
-	iniciar: function(){
+	jogadaBot: function(){
+		if(Teste.vez != '2'){
+			return false;
+		}
+		var i = 1;
+		var j = 1;
+		if(Teste.l[0].indexOf('0') != -1 && (Teste.l[0].indexOf('11') !== -1 || Teste.l[0].indexOf('22') !== -1)){
+			i = 0;
+			j = Teste.l[0].indexOf('0');
+		}else if(Teste.l[1].indexOf('0') != -1 && (Teste.l[1].indexOf('11') !== -1 || Teste.l[1].indexOf('22') !== -1)){
+			i = 1;
+			j = Teste.l[1].indexOf('0');
+		}else if(Teste.l[2].indexOf('0') != -1 && (Teste.l[2].indexOf('11') !== -1 || Teste.l[2].indexOf('22') !== -1)){
+			i = 2;
+			j = Teste.l[2].indexOf('0');
+		}else if(Teste.c[0].indexOf('0') != -1 && (Teste.c[0].indexOf('11') !== -1 || Teste.c[0].indexOf('22') !== -1)){
+			i = Teste.c[0].indexOf('0');
+			j = 0;
+		}else if(Teste.c[1].indexOf('0') != -1 && (Teste.c[1].indexOf('11') !== -1 || Teste.c[1].indexOf('22') !== -1)){
+			i = Teste.c[1].indexOf('0');
+			j = 1;
+		}else if(Teste.c[2].indexOf('0') != -1 && (Teste.c[2].indexOf('11') !== -1 || Teste.c[2].indexOf('22') !== -1)){
+			i = Teste.c[2].indexOf('0');
+			j = 2;
+		}else if(Teste.d[0].indexOf('0') != -1 && (Teste.d[0].indexOf('11') !== -1 || Teste.d[0].indexOf('22') !== -1)){
+			i = Teste.d[0].indexOf('0');
+			j = i;
+		}else if(Teste.d[1].indexOf('0') != -1 && (Teste.d[1].indexOf('11') !== -1 || Teste.d[1].indexOf('22') !== -1)){
+			i = Teste.d[0].indexOf('0');
+			j = 2 - Teste.d[0].indexOf('0');
+		}else{
+			if(Teste.l[0] == '111' && Teste.l[1] == '111' && Teste.l[2] == '111'){
+				return false;
+			}
+			var count = 0;
+			while(Teste.grid[i][j]!='0' && count < 1000){
+				i = ~~(Math.random()*3);
+				j = ~~(Math.random()*3);
+				count++;
+			}
+		}
+
+		console.log(i,j);
+		if(Teste.grid[i][j]){
+			Teste.gravarJogada(j,i,'2');
+		}else{
+			console.log("Não existe a posição ",i,j);
+		}
+		Teste.vez = '1';
+	},
+	calcularVitoria: function(){
+		if(Teste.l.includes('111') || Teste.c.includes('111') || Teste.d.includes('111')){
+			Teste.vencedor = '1';
+		}else if(Teste.l.includes('222') || Teste.c.includes('222') || Teste.d.includes('222')){
+			Teste.vencedor = '2';
+		}if(
+			Teste.l[0].indexOf('0') == -1 &&
+			Teste.l[1].indexOf('0') == -1 &&
+			Teste.l[2].indexOf('0') == -1 &&
+			Teste.c[0].indexOf('0') == -1 &&
+			Teste.c[1].indexOf('0') == -1 &&
+			Teste.c[2].indexOf('0') == -1 &&
+			Teste.d[0].indexOf('0') == -1 &&
+			Teste.d[1].indexOf('0') == -1
+		){
+			Teste.vencedor = 0
+		}else{
+			return false;
+		}
+		return true;
+	},
+	iniciar: function(bot){
 		MOUSE_EVENTS['jogo_da_velha'] = function(x,y){
 			Teste.calcularJogada(x,y);
 		}
+		if(bot){
+			Teste.vez = '1';
+			Teste.tela = 'game';
+		}
+		Teste.start = true;
 	},
 	desenhar: function(){
 		if(Teste.tela == 'pause'){
 			Teste.desenharPause();
-		}else{
+		}else if(Teste.tela == 'game'){
 			Teste.desenharVez();
 			Teste.desenharGrade();
 			Teste.desenharObjetos();
+		}else if(Teste.tela == 'final'){
+			Teste.desenharFinal();
 		}
 	}
 };
