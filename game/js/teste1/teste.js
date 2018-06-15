@@ -45,14 +45,25 @@ Teste = {
 		}
 	},
 	desenharFinal: function(){
+		CONTEXT.fillStyle = 'rgba(255,255,255,0.5)';
+		CONTEXT.fillRect(0,0,700,400);
+		CONTEXT.fillStyle = 'black';
 		CONTEXT.font = "50px Verdana";
 		if(Teste.vencedor == '1'){
 			CONTEXT.fillText("Você Venceu!",200,200);	
 		}else if(Teste.vencedor == '2'){
 			CONTEXT.fillText("Você Perdeu!",200,200);
 		}else{
-			CONTEXT.fillText("Empatou!",200,200);
+			CONTEXT.fillText("Empatou!",230,200);
 		}
+		CONTEXT.font = "30px Verdana";
+		CONTEXT.fillText("Clique para jogar novamente", 150, 300);
+		MOUSE_EVENTS['jogar_novamente'] = function(){
+			Teste.tela = 'game';
+			Teste.vez = '1';
+			Teste.grid = [['0','0','0'],['0','0','0'],['0','0','0']];
+			delete MOUSE_EVENTS['jogar_novamente'];
+		};
 	},
 	calcularObjeto: function(x,y){
 		var objX = ~~((x-200)/100);
@@ -158,7 +169,7 @@ Teste = {
 			Teste.vencedor = '1';
 		}else if(Teste.l.includes('222') || Teste.c.includes('222') || Teste.d.includes('222')){
 			Teste.vencedor = '2';
-		}if(
+		}else if(
 			Teste.l[0].indexOf('0') == -1 &&
 			Teste.l[1].indexOf('0') == -1 &&
 			Teste.l[2].indexOf('0') == -1 &&
@@ -192,6 +203,8 @@ Teste = {
 			Teste.desenharGrade();
 			Teste.desenharObjetos();
 		}else if(Teste.tela == 'final'){
+			Teste.desenharGrade();
+			Teste.desenharObjetos();
 			Teste.desenharFinal();
 		}
 	}
