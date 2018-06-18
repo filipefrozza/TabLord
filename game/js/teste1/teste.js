@@ -102,10 +102,7 @@ Teste = {
 					Teste.tela = 'final';
 				}else{
 					Teste.vez = '2';
-					Teste.jogadaBot();
-					if(Teste.calcularVitoria()){
-						Teste.tela = 'final';
-					}
+					// Teste.jogadaBot();
 				}
 				return true;
 			}else{
@@ -161,6 +158,9 @@ Teste = {
 			Teste.gravarJogada(j,i,'2');
 		}else{
 			console.log("Não existe a posição ",i,j);
+		}
+		if(Teste.calcularVitoria()){
+			Teste.tela = 'final';
 		}
 		Teste.vez = '1';
 	},
