@@ -29,6 +29,7 @@ contas = require('./modulos/contas/');
 players = [];
 
 io.on('connection', function(socket){
+	game = require('./modulos/games/jogo_da_velha/');
 	player = {};
 	salas.iniciar(socket, player);
 	contas.iniciar(socket, player);

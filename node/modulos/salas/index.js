@@ -57,11 +57,17 @@ exports.iniciar = function(socket, player){
 		      	// delete rsala.mensagens;
 		      	socket.emit('sala_conectado', JSON.stringify(salas.data[m.sala]));
 		      	io.emit('atualizar_salas', JSON.stringify(salas.data));
+		      	io.to(m.sala).emit('checar_adversario', JSON.stringify(salas.data[m.sala]));
 		      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({player: 'Sistema', mensagem: m.login+" entrou na sala"}));
 		    }
 		}else{
 			socket.emit('sala_conectado', JSON.stringify({erro: "A sala não existe mais"}));
 		}
+	});
+
+	socket.on('checar_adversario', function(m){
+		m = JSON.parse(m);
+		game.checarAdversario(m, player);
 	});
 
 	socket.on('buscar_salas', function(m){

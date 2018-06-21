@@ -105,6 +105,10 @@ angular.module('tablord')
             $scope.aplicar();
 		});
 
+        socket.on('checar_adversario', function(m){
+            socket.emit('checar_adversario',m);
+        });
+
 		$scope.aplicar = function(){
             setTimeout(function(){$scope.$apply();},50);
         };
