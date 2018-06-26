@@ -120,3 +120,8 @@ exports.checarAdversario = function(sala, player){
 		}
 	}
 };
+
+exports.iniciar = function(){
+	game.tela = 'game';
+	game.vez = ~~(Math.random()*2)?'1':'2';
+};

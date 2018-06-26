@@ -19,7 +19,8 @@ exports.criarSala = function(sala, player){
 		lider: player.nome,
 		quantidade: 0,
 		regras: sala.regras,
-		limite: sala.limite
+		limite: sala.limite,
+		game: false
 	};
 	// this.data[index].integrantes[player.index] = player;
 	return true;
@@ -57,7 +58,10 @@ exports.iniciar = function(socket, player){
 		      	// delete rsala.mensagens;
 		      	socket.emit('sala_conectado', JSON.stringify(salas.data[m.sala]));
 		      	io.emit('atualizar_salas', JSON.stringify(salas.data));
-		      	io.to(m.sala).emit('checar_adversario', JSON.stringify(salas.data[m.sala]));
+		      	// io.to(m.sala).emit('checar_adversario', JSON.stringify(salas.data[m.sala]));
+		      	if(salas.data[m.sala].quantidade == salas.data[m.sala].limite){
+		      		salas.data[m.sala].game = require('./modulos/games/jogo_da_velha/');
+		      	}
 		      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({player: 'Sistema', mensagem: m.login+" entrou na sala"}));
 		    }
 		}else{
