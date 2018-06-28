@@ -12,20 +12,20 @@ exports.data = {
 };
 
 exports.calcularJogada = function(x,y){
-	if(game.vez != '1'){
+	if(exports.data.vez != '1'){
 		return false;
 	}
 	var obj = game.calcularObjeto(x,y);
 	//nessa parte, o jogo deve mandar via socket, e receber a informação se a jogada é válida
 	if(obj){
-		if(game.grid[obj.y][obj.x] == '0'){
-			game.gravarJogada(obj.x,obj.y,'1');
-			if(game.calcularVitoria()){
-				game.tela = 'final';
+		if(exports.data.grid[obj.y][obj.x] == '0'){
+			exports.gravarJogada(obj.x,obj.y,'1');
+			if(exports.calcularVitoria()){
+				exports.data.tela = 'final';
 			}else{
-				game.vez = '2';
-				if(game.bot){
-					game.jogadaBot();
+				exports.data.vez = '2';
+				if(exports.data.bot){
+					exports.jogadaBot();
 				}
 			}
 			return true;
@@ -37,41 +37,41 @@ exports.calcularJogada = function(x,y){
 };
 
 exports.jogadaBot = function(){
-	if(game.vez != '2'){
+	if(exports.data.vez != '2'){
 		return false;
 	}
 	var i = 1;
 	var j = 1;
-	if(game.l[0].indexOf('0') != -1 && (game.l[0].indexOf('11') !== -1 || game.l[0].indexOf('22') !== -1)){
+	if(exports.data.l[0].indexOf('0') != -1 && (exports.data.l[0].indexOf('11') !== -1 || exports.data.l[0].indexOf('22') !== -1)){
 		i = 0;
-		j = game.l[0].indexOf('0');
-	}else if(game.l[1].indexOf('0') != -1 && (game.l[1].indexOf('11') !== -1 || game.l[1].indexOf('22') !== -1)){
+		j = exports.data.l[0].indexOf('0');
+	}else if(exports.data.l[1].indexOf('0') != -1 && (exports.data.l[1].indexOf('11') !== -1 || exports.data.l[1].indexOf('22') !== -1)){
 		i = 1;
-		j = game.l[1].indexOf('0');
-	}else if(game.l[2].indexOf('0') != -1 && (game.l[2].indexOf('11') !== -1 || game.l[2].indexOf('22') !== -1)){
+		j = exports.data.l[1].indexOf('0');
+	}else if(exports.data.l[2].indexOf('0') != -1 && (exports.data.l[2].indexOf('11') !== -1 || exports.data.l[2].indexOf('22') !== -1)){
 		i = 2;
-		j = game.l[2].indexOf('0');
-	}else if(game.c[0].indexOf('0') != -1 && (game.c[0].indexOf('11') !== -1 || game.c[0].indexOf('22') !== -1)){
-		i = game.c[0].indexOf('0');
+		j = exports.data.l[2].indexOf('0');
+	}else if(exports.data.c[0].indexOf('0') != -1 && (exports.data.c[0].indexOf('11') !== -1 || exports.data.c[0].indexOf('22') !== -1)){
+		i = exports.data.c[0].indexOf('0');
 		j = 0;
-	}else if(game.c[1].indexOf('0') != -1 && (game.c[1].indexOf('11') !== -1 || game.c[1].indexOf('22') !== -1)){
-		i = game.c[1].indexOf('0');
+	}else if(exports.data.c[1].indexOf('0') != -1 && (exports.data.c[1].indexOf('11') !== -1 || exports.data.c[1].indexOf('22') !== -1)){
+		i = exports.data.c[1].indexOf('0');
 		j = 1;
-	}else if(game.c[2].indexOf('0') != -1 && (game.c[2].indexOf('11') !== -1 || game.c[2].indexOf('22') !== -1)){
-		i = game.c[2].indexOf('0');
+	}else if(exports.data.c[2].indexOf('0') != -1 && (exports.data.c[2].indexOf('11') !== -1 || exports.data.c[2].indexOf('22') !== -1)){
+		i = exports.data.c[2].indexOf('0');
 		j = 2;
-	}else if(game.d[0].indexOf('0') != -1 && (game.d[0].indexOf('11') !== -1 || game.d[0].indexOf('22') !== -1)){
-		i = game.d[0].indexOf('0');
+	}else if(exports.data.d[0].indexOf('0') != -1 && (exports.data.d[0].indexOf('11') !== -1 || exports.data.d[0].indexOf('22') !== -1)){
+		i = exports.data.d[0].indexOf('0');
 		j = i;
-	}else if(game.d[1].indexOf('0') != -1 && (game.d[1].indexOf('11') !== -1 || game.d[1].indexOf('22') !== -1)){
-		i = game.d[0].indexOf('0');
-		j = 2 - game.d[0].indexOf('0');
+	}else if(exports.data.d[1].indexOf('0') != -1 && (exports.data.d[1].indexOf('11') !== -1 || exports.data.d[1].indexOf('22') !== -1)){
+		i = exports.data.d[0].indexOf('0');
+		j = 2 - exports.data.d[0].indexOf('0');
 	}else{
-		if(game.l[0] == '111' && game.l[1] == '111' && game.l[2] == '111'){
+		if(exports.data.l[0] == '111' && exports.data.l[1] == '111' && exports.data.l[2] == '111'){
 			return false;
 		}
 		var count = 0;
-		while(game.grid[i][j]!='0' && count < 1000){
+		while(exports.data.grid[i][j]!='0' && count < 1000){
 			i = ~~(Math.random()*3);
 			j = ~~(Math.random()*3);
 			count++;
@@ -79,33 +79,33 @@ exports.jogadaBot = function(){
 	}
 
 	console.log(i,j);
-	if(game.grid[i][j]){
-		game.gravarJogada(j,i,'2');
+	if(exports.data.grid[i][j]){
+		exports.gravarJogada(j,i,'2');
 	}else{
 		console.log("Não existe a posição ",i,j);
 	}
-	if(game.calcularVitoria()){
-		game.tela = 'final';
+	if(exports.calcularVitoria()){
+		exports.data.tela = 'final';
 	}
-	game.vez = '1';
+	exports.data.vez = '1';
 };
 
 exports.calcularVitoria = function(){
-	if(game.l.includes('111') || game.c.includes('111') || game.d.includes('111')){
-		game.vencedor = '1';
-	}else if(game.l.includes('222') || game.c.includes('222') || game.d.includes('222')){
-		game.vencedor = '2';
+	if(exports.data.l.includes('111') || exports.data.c.includes('111') || exports.data.d.includes('111')){
+		exports.data.vencedor = '1';
+	}else if(exports.data.l.includes('222') || exports.data.c.includes('222') || exports.data.d.includes('222')){
+		exports.data.vencedor = '2';
 	}else if(
-		game.l[0].indexOf('0') == -1 &&
-		game.l[1].indexOf('0') == -1 &&
-		game.l[2].indexOf('0') == -1 &&
-		game.c[0].indexOf('0') == -1 &&
-		game.c[1].indexOf('0') == -1 &&
-		game.c[2].indexOf('0') == -1 &&
-		game.d[0].indexOf('0') == -1 &&
-		game.d[1].indexOf('0') == -1
+		exports.data.l[0].indexOf('0') == -1 &&
+		exports.data.l[1].indexOf('0') == -1 &&
+		exports.data.l[2].indexOf('0') == -1 &&
+		exports.data.c[0].indexOf('0') == -1 &&
+		exports.data.c[1].indexOf('0') == -1 &&
+		exports.data.c[2].indexOf('0') == -1 &&
+		exports.data.d[0].indexOf('0') == -1 &&
+		exports.data.d[1].indexOf('0') == -1
 	){
-		game.vencedor = 0
+		exports.data.vencedor = 0
 	}else{
 		return false;
 	}
@@ -115,13 +115,13 @@ exports.calcularVitoria = function(){
 exports.checarAdversario = function(sala, player){
 	for(i in sala.integrantes){
 		if(sala.integrantes[i] != player.login){
-			game.adversario = sala.integrantes[i];
+			exports.data.adversario = sala.integrantes[i];
 			console.log('tem adversário');
 		}
 	}
 };
 
 exports.iniciar = function(){
-	game.tela = 'game';
-	game.vez = ~~(Math.random()*2)?'1':'2';
+	exports.data.tela = 'game';
+	exports.data.vez = ~~(Math.random()*2)?'1':'2';
 };

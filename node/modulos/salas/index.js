@@ -71,7 +71,8 @@ exports.iniciar = function(socket, player){
 
 	socket.on('checar_adversario', function(m){
 		m = JSON.parse(m);
-		game.checarAdversario(m, player);
+		console.log(player.sala);
+		// game.checarAdversario(salas.data[player.sala], player);
 	});
 
 	socket.on('buscar_salas', function(m){
@@ -119,7 +120,7 @@ exports.iniciar = function(socket, player){
 		if(!m.limite) m.limite = 4;
 		if(m.limite != 2 || m.limite != 3 || m.limite != 4) m.limite = 4;
 		var index = m.nome.toLowerCase().replace(' ','-');
-		if(salas.criarSala(m, player)){
+		if(exports.criarSala(m, player)){
 			io.emit('sala_criada', JSON.stringify(salas.data));
 			socket.emit('forcar_entrada', JSON.stringify(salas.data[index]));
 		}else{
