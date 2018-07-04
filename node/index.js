@@ -30,7 +30,7 @@ players = [];
 
 io.on('connection', function(socket){
 	// game = 
-	player = {};
-	salas.iniciar(socket, player);
-	contas.iniciar(socket, player);
+	contas.iniciar(socket);
+	salas.iniciar(socket);
+	// console.log(socket);
 });

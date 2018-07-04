@@ -1,4 +1,4 @@
-exports.iniciar = function(socket, player){
+exports.iniciar = function(socket){
   socket.on('logar',function(usuario){
     usuario = JSON.parse(usuario);
     db_connection.query("select login, nome from jogador where login='"+usuario.login+"' and senha='"+crypto.createHash('md5').update('frozza'+usuario.senha+'frozza').digest("hex")+"'", function(err, rows, fields){
@@ -14,7 +14,7 @@ exports.iniciar = function(socket, player){
         var auth = crypto.createHash('md5').update(""+~~(Math.random()*100000)).digest("hex");
         db_connection.execute("UPDATE jogador SET auth=? WHERE login=?",[auth,usuario.login],function(err,res){
           if(err) throw err;
-          player = rows[0];
+          socket.player = rows[0];
           socket.emit('retorno_auth',JSON.stringify({auth: auth, nome: rows[0].nome}));
           socket.emit('logou', rows[0].nome);
           console.log("gerou auth "+auth);

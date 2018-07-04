@@ -8,25 +8,7 @@ exports.data = {
   // }
 };
 
-exports.criarSala = function(sala, player){
-	var index = sala.nome.toLowerCase().replace(' ','-');
-	if(this.data[index])
-		return false;
-	this.data[index] = {
-		nome: sala.nome,
-		integrantes: {},
-		index: index,
-		lider: player.nome,
-		quantidade: 0,
-		regras: sala.regras,
-		limite: sala.limite,
-		game: false
-	};
-	// this.data[index].integrantes[player.index] = player;
-	return true;
-};
-
-exports.iniciar = function(socket, player){
+exports.iniciar = function(socket){
 	socket.on('conectar',function(m){
 		m = JSON.parse(m);
 	    if(!players[m.login]){
@@ -57,10 +39,15 @@ exports.iniciar = function(socket, player){
 		      	// rsala = Object.assign({}, salas.data[m.sala]);
 		      	// delete rsala.mensagens;
 		      	socket.emit('sala_conectado', JSON.stringify(salas.data[m.sala]));
+		      	socket.player.sala = m.sala;
 		      	io.emit('atualizar_salas', JSON.stringify(salas.data));
 		      	// io.to(m.sala).emit('checar_adversario', JSON.stringify(salas.data[m.sala]));
 		      	if(salas.data[m.sala].quantidade == salas.data[m.sala].limite){
-		      		salas.data[m.sala].game = require('./modulos/games/jogo_da_velha/');
+		      		salas.data[m.sala].game = require('../games/jogo_da_velha/');
+		      		salas.data[m.sala].game.iniciar();
+		      		console.log("o jogo foi iniciado");
+		      		// io.emit('atualizar_jogo_node');
+		      		exports.atualizarJogo(socket);
 		      	}
 		      	io.to(m.sala).emit('sala_mensagem_atualizar', JSON.stringify({player: 'Sistema', mensagem: m.login+" entrou na sala"}));
 		    }
@@ -118,13 +105,40 @@ exports.iniciar = function(socket, player){
 	socket.on('criar_sala', function(m){
 		m = JSON.parse(m);
 		if(!m.limite) m.limite = 4;
-		if(m.limite != 2 || m.limite != 3 || m.limite != 4) m.limite = 4;
+		if(m.limite != 2 || m.limite != 3 || m.limite != 4) m.limite = 2;
 		var index = m.nome.toLowerCase().replace(' ','-');
-		if(exports.criarSala(m, player)){
+		if(exports.criarSala(m, socket)){
 			io.emit('sala_criada', JSON.stringify(salas.data));
 			socket.emit('forcar_entrada', JSON.stringify(salas.data[index]));
 		}else{
 			socket.emit('sala_criada', JSON.stringify({erro: 'Já existe'}));
 		}
 	});
+
+	// socket.on('atualizar_jogo_node', function(){
+	// 	console.log(m);
+	// });
+};
+
+exports.atualizarJogo = function(socket){
+	console.log(socket.player);
+	io.to(socket.player.sala).emit('atualizar_jogo',JSON.stringify(salas.data[socket.player.sala].game));
+};
+
+exports.criarSala = function(sala, socket){
+	var index = sala.nome.toLowerCase().replace(' ','-');
+	if(this.data[index])
+		return false;
+	this.data[index] = {
+		nome: sala.nome,
+		integrantes: {},
+		index: index,
+		lider: socket.player.nome,
+		quantidade: 0,
+		regras: sala.regras,
+		limite: sala.limite,
+		game: false
+	};
+	// this.data[index].integrantes[player.index] = player;
+	return true;
 };
