@@ -213,15 +213,15 @@ Teste = {
 
 socket.on('atualizar_jogo', function(m){
 	m = JSON.parse(m);
-	Teste.tela: m.tela,
-	Teste.vez: m.vez,
-	Teste.adversario: m.adversario,
-	Teste.grid: m.grid,
-	Teste.l: m.l,
-	Teste.c: m.c,
-	Teste.d: m.d,
-	Teste.start: m.start,
-	Teste.vencedor: m.vencedor,
-	Teste.bot: m.bot;
+	Teste.tela = m.tela,
+	Teste.vez = m.vez,
+	Teste.adversario = m.adversario,
+	Teste.grid = m.grid,
+	Teste.l = m.l,
+	Teste.c = m.c,
+	Teste.d = m.d,
+	Teste.start = m.start,
+	Teste.vencedor = m.vencedor,
+	Teste.bot = m.bot;
 	console.log(m);
 });

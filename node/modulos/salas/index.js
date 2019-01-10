@@ -8,6 +8,8 @@ exports.data = {
   // }
 };
 
+//[...Object.keys(a)] para pegar chave de array
+
 exports.iniciar = function(socket){
 	socket.on('conectar',function(m){
 		m = JSON.parse(m);

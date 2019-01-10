@@ -98,19 +98,21 @@ exports.jogadaBot = function(){
 };
 
 exports.calcularVitoria = function(){
-	if(exports.data.l.includes('000') || exports.data.c.includes('000') || exports.data.d.includes('000')){
+	var p0 = exports.data.participantes[0];
+	var p1 = exports.data.participantes[1];
+	if(exports.data.l.includes(p0+p0+p0) || exports.data.c.includes(p0+p0+p0) || exports.data.d.includes(p0+p0+p0)){
 		exports.data.vencedor = 0;
-	}else if(exports.data.l.includes('111') || exports.data.c.includes('111') || exports.data.d.includes('111')){
+	}else if(exports.data.l.includes(p1+p1+p1) || exports.data.c.includes(p1+p1+p1) || exports.data.d.includes(p1+p1+p1)){
 		exports.data.vencedor = 1;
 	}else if(
-		exports.data.l[0].indexOf('0') == -1 &&
-		exports.data.l[1].indexOf('0') == -1 &&
-		exports.data.l[2].indexOf('0') == -1 &&
-		exports.data.c[0].indexOf('0') == -1 &&
-		exports.data.c[1].indexOf('0') == -1 &&
-		exports.data.c[2].indexOf('0') == -1 &&
-		exports.data.d[0].indexOf('0') == -1 &&
-		exports.data.d[1].indexOf('0') == -1
+		exports.data.l[0].indexOf(p0) == -1 &&
+		exports.data.l[1].indexOf(p0) == -1 &&
+		exports.data.l[2].indexOf(p0) == -1 &&
+		exports.data.c[0].indexOf(p0) == -1 &&
+		exports.data.c[1].indexOf(p0) == -1 &&
+		exports.data.c[2].indexOf(p0) == -1 &&
+		exports.data.d[0].indexOf(p0) == -1 &&
+		exports.data.d[1].indexOf(p0) == -1
 	){
 		exports.data.vencedor = -1
 	}else{
@@ -151,7 +153,7 @@ function gravarJogada(x,y,v){
 
 exports.iniciar = function(){
 	exports.data.tela = 'game';
-	exports.data.vez = ~~(Math.random()*exports.data.participantes.length);
+	exports.data.vez = exports.data.participantes[~~(Math.random()*exports.data.participantes.length)];
 	console.log("jogo iniciado com a vez "+exports.data.vez);
 	exports.atualizar();
 };
